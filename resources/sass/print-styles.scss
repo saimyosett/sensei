@@ -1,0 +1,35 @@
+@import "variables";
+
+header {
+  display: none;
+}
+
+html, body {
+  font-size: 12px;
+  background-color: #FFF;
+}
+
+.page-content {
+  margin: 0 auto;
+}
+
+.print-hidden {
+  display: none !important;
+}
+
+.tri-layout-container {
+  grid-template-columns: 1fr;
+  grid-template-areas: "b";
+  margin-left: 0;
+  margin-right: 0;
+  display: block;
+}
+
+.card {
+  box-shadow: none;
+}
+
+.content-wrap.card {
+  padding-left: 0;
+  padding-right: 0;
+}

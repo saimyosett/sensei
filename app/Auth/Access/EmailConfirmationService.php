@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Auth\Access;
+
+use App\Auth\User;
+use App\Exceptions\ConfirmationEmailException;
+use App\Notifications\ConfirmEmail;
+
+class EmailConfirmationService extends UserTokenService
+{
+    protected $tokenTable = 'email_confirmations';
+    protected $expiryTime = 24;
+
+    /**
+     * Create new confirmation for a user,
+     * Also removes any existing old ones.
+     * @param User $user
+     * @throws ConfirmationEmailException
+     */
+    public function sendConfirmation(User $user)
+    {
+        if ($user->email_confirmed) {
+            throw new ConfirmationEmailException(trans('errors.email_already_confirmed'), '/login');
+        }
+
+        $this->deleteByUser($user);
+        $token = $this->createTokenForUser($user);
+
+        $user->notify(new ConfirmEmail($token));
+    }
+
+    /**
+     * Check if confirmation is required in this instance.
+     * @return bool
+     */
+    public function confirmationRequired() : bool
+    {
+        return setting('registration-confirmation')
+            || setting('registration-restrict');
+    }
+}
