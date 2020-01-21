@@ -15,8 +15,6 @@ class HomepageControl {
         this.pagePickerContainer.style.display = (showPagePicker ? 'block' : 'none');
     }
 
-
-
 }
 
 export default HomepageControl;

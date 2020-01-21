@@ -127,9 +127,10 @@ class ChapterController extends Controller
     public function destroy(string $bookSlug, string $chapterSlug)
     {
         $chapter = $this->chapterRepo->getBySlug($bookSlug, $chapterSlug);
+
         $this->checkOwnablePermission('chapter-delete', $chapter);
 
-        Activity::addMessage('chapter_delete', $chapter->name, $chapter->book->id);
+        // Activity::addMessage('chapter_delete', $chapter->name, $chapter->book->id);
         $this->chapterRepo->destroy($chapter);
 
         return redirect($chapter->book->getUrl());

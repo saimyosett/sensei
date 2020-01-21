@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEntityPermissoinsTable extends Migration
+class CreateEntityPermissionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateEntityPermissoinsTable extends Migration
      */
     public function up()
     {
-        Schema::create('entity_permissoins', function (Blueprint $table) {
+        Schema::create('entity_permissions', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('restrictable_id');
             $table->string('restrictable_type');
@@ -32,6 +32,6 @@ class CreateEntityPermissoinsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('entity_permissoins');
+        Schema::dropIfExists('entity_permissions');
     }
 }

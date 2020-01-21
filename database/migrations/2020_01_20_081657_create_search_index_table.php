@@ -13,7 +13,7 @@ class CreateSearchIndexTable extends Migration
      */
     public function up()
     {
-        Schema::create('search_index', function (Blueprint $table) {
+        Schema::create('search_terms', function (Blueprint $table) {
             $table->increments('id');
             $table->string('term', 200);
             $table->string('entity_type', 100);
@@ -60,6 +60,6 @@ class CreateSearchIndexTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('search_index');
+        Schema::dropIfExists('search_terms');
     }
 }

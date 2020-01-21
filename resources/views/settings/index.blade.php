@@ -8,9 +8,9 @@
                 @include('settings.navbar', ['selected' => 'settings'])
             </div>
             <div class="text-right p-m">
-                <a target="_blank" rel="noopener noreferrer" href="https://github.com/BookStackApp/BookStack/releases">
-                    BookStack @if(strpos($version, 'v') !== 0) version @endif {{ $version }}
-                </a>
+                {{-- <a target="_blank" rel="noopener noreferrer" href="https://github.com/BookStackApp/BookStack/releases">
+                    Sensei @if(strpos($version, 'v') !== 0) version @endif {{ $version }}
+                </a> --}}
             </div>
         </div>
 
@@ -91,7 +91,7 @@
                             <p class="small">{{ trans('settings.app_name_desc') }}</p>
                         </div>
                         <div>
-                            <input type="text" value="{{ setting('app-name', 'BookStack') }}" name="setting-app-name" id="setting-app-name">
+                            <input type="text" value="{{ setting('app-name', 'Sensei') }}" name="setting-app-name" id="setting-app-name">
                             @include('components.toggle-switch', [
                                 'name' => 'setting-app-name-header',
                                 'value' => setting('app-name-header'),
@@ -175,22 +175,22 @@
                                 <option @if(setting('app-homepage-type') === 'default') selected @endif value="default">{{ trans('common.default') }}</option>
                                 <option @if(setting('app-homepage-type') === 'books') selected @endif value="books">{{ trans('entities.books') }}</option>
                                 <option @if(setting('app-homepage-type') === 'bookshelves') selected @endif value="bookshelves">{{ trans('entities.shelves') }}</option>
-                                <option @if(setting('app-homepage-type') === 'page') selected @endif value="page">{{ trans('entities.pages_specific') }}</option>
+                                {{-- <option @if(setting('app-homepage-type') === 'page') selected @endif value="page">{{ trans('entities.pages_specific') }}</option> --}}
                             </select>
 
-                            <div page-picker-container style="display: none;" class="mt-m">
+                            {{-- <div page-picker-container style="display: none;" class="mt-m">
                                 @include('components.page-picker', ['name' => 'setting-app-homepage', 'placeholder' => trans('settings.app_homepage_select'), 'value' => setting('app-homepage')])
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
 
 
-                    <div>
+                    {{-- <div>
                         <label for="setting-app-custom-head" class="setting-list-label">{{ trans('settings.app_custom_html') }}</label>
                         <p class="small">{{ trans('settings.app_custom_html_desc') }}</p>
                         <textarea name="setting-app-custom-head" id="setting-app-custom-head" class="simple-code-input mt-m">{{ setting('app-custom-head', '') }}</textarea>
                         <p class="small text-right">{{ trans('settings.app_custom_html_disabled_notice') }}</p>
-                    </div>
+                    </div> --}}
 
 
                 </div>
@@ -201,7 +201,7 @@
             </form>
         </div>
 
-        <div class="card content-wrap auto-height">
+        {{-- <div class="card content-wrap auto-height">
             <h2 class="list-heading">{{ trans('settings.reg_settings') }}</h2>
             <form action="{{ url("/settings") }}" method="POST">
                 {!! csrf_field() !!}
@@ -225,9 +225,9 @@
 
                             <label for="setting-registration-role">{{ trans('settings.reg_default_role') }}</label>
                             <select id="setting-registration-role" name="setting-registration-role" @if($errors->has('setting-registration-role')) class="neg" @endif>
-                                @foreach(\BookStack\Auth\Role::all() as $role)
+                                @foreach(\App\Auth\Role::all() as $role)
                                     <option value="{{$role->id}}" data-role-name="{{ $role->name }}"
-                                            @if(setting('registration-role', \BookStack\Auth\Role::first()->id) == $role->id) selected @endif
+                                            @if(setting('registration-role', \App\Auth\Role::first()->id) == $role->id) selected @endif
                                     >
                                         {{ $role->display_name }}
                                     </option>
@@ -268,7 +268,7 @@
             </form>
         </div>
 
-    </div>
+    </div> --}}
 
     @include('components.image-manager', ['imageType' => 'system'])
     @include('components.entity-selector-popup', ['entityTypes' => 'page'])

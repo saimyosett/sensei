@@ -1,4 +1,4 @@
-<?php¥
+<?php
 
 namespace App\Entities;
 
@@ -7,7 +7,6 @@ use Illuminate\View\View;
 
 class BreadcrumbsViewComposer
 {
-
     protected $entityContextManager;
 
     /**

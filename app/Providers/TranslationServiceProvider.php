@@ -8,26 +8,6 @@ use Illuminate\Support\ServiceProvider;
 class TranslationServiceProvider extends ServiceProvider
 {
     /**
-     * Register services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
-
-    /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
-
-    /**
     * Register the translation line loader.
     * Overrides the default register action from Laravel so a custom loader can be used.
     * @return void

@@ -121,7 +121,8 @@ class UserController extends Controller
      * @param \App\Auth\Access\SocialAuthService $socialAuthService
      * @return Response
      */
-    public function edit($id, SocialAuthService $socialAuthService)
+    // public function edit($id, SocialAuthService $socialAuthService)
+    public function edit($id)
     {
         $this->checkPermissionOrCurrentUser('users-manage', $id);
 
@@ -129,10 +130,14 @@ class UserController extends Controller
 
         $authMethod = ($user->system_name) ? 'system' : config('auth.method');
 
-        $activeSocialDrivers = $socialAuthService->getActiveDrivers();
+        // $activeSocialDrivers = $socialAuthService->getActiveDrivers();
         $this->setPageTitle(trans('settings.user_profile'));
         $roles = $this->userRepo->getAllRoles();
-        return view('users.edit', ['user' => $user, 'activeSocialDrivers' => $activeSocialDrivers, 'authMethod' => $authMethod, 'roles' => $roles]);
+        return view('users.edit', [
+            'user' => $user,
+            // 'activeSocialDrivers' => $activeSocialDrivers,
+            'authMethod' => $authMethod, 'roles' => $roles
+        ]);
     }
 
     /**
@@ -151,8 +156,8 @@ class UserController extends Controller
         $this->validate($request, [
             'name'             => 'min:2',
             'email'            => 'min:2|email|unique:users,email,' . $id,
-            'password'         => 'min:6|required_with:password_confirm',
-            'password-confirm' => 'same:password|required_with:password',
+            'password'         => 'nullable|required_with:password-confirm|min:6',
+            'password-confirm' => 'required_with:password|same:password',
             'setting'          => 'array',
             'profile_image'    => $this->imageRepo->getImageValidationRules(),
         ]);

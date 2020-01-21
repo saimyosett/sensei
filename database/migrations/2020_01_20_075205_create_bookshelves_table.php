@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateBookshelvesTable extends Migration
 {
@@ -43,6 +44,8 @@ class CreateBookshelvesTable extends Migration
                 ->onUpdate('cascade')->onDelete('cascade');
         });
 
+        DB::table('role_permissions')->where('name', 'like', 'bookshelf-%')->delete();
+
         $ops = ['View All', 'View Own', 'Create All', 'Create Own', 'Update All', 'Update Own', 'Delete All', 'Delete Own'];
         foreach ($ops as $op) {
             $dbOpName = strtolower(str_replace(' ', '-', $op));
@@ -54,8 +57,8 @@ class CreateBookshelvesTable extends Migration
             $permId = DB::table('role_permissions')->insertGetId([
                 'name' => 'bookshelf-' . $dbOpName,
                 'display_name' => $op . ' ' . 'BookShelves',
-                'created_at' => \Carbon\Carbon::now()->toDateTimeString(),
-                'updated_at' => \Carbon\Carbon::now()->toDateTimeString()
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString()
             ]);
 
             $rowsToInsert = $roleIdsWithBookPermission->filter(function ($roleId) {

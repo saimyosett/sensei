@@ -56,12 +56,16 @@ class SettingController extends Controller
             'app_logo' => $this->imageRepo->getImageValidationRules(),
         ]);
 
+        // ddd($request);
         // Cycles through posted settings and update them
         foreach ($request->all() as $name => $value) {
             if (strpos($name, 'setting-') !== 0) {
                 continue;
             }
             $key = str_replace('setting-', '', trim($name));
+            if (is_null($value)) {
+                $value = str_replace($value, '', ' ');
+            }
             setting()->put($key, $value);
         }
 

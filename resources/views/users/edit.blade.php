@@ -63,30 +63,6 @@
             </form>
         </section>
 
-        @if($currentUser->id === $user->id && count($activeSocialDrivers) > 0)
-            <section class="card content-wrap auto-height">
-                <h2 class="list-heading">{{ trans('settings.users_social_accounts') }}</h2>
-                <p class="text-muted">{{ trans('settings.users_social_accounts_info') }}</p>
-                <div class="container">
-                    <div class="grid third">
-                        @foreach($activeSocialDrivers as $driver => $enabled)
-                            <div class="text-center mb-m">
-                                <div role="presentation">@icon('auth/'. $driver, ['style' => 'width: 56px;height: 56px;'])</div>
-                                <div>
-                                    @if($user->hasSocialAccount($driver))
-                                        <a href="{{ url("/login/service/{$driver}/detach") }}" aria-label="{{ trans('settings.users_social_disconnect') }} - {{ $driver }}"
-                                           class="button small outline">{{ trans('settings.users_social_disconnect') }}</a>
-                                    @else
-                                        <a href="{{ url("/login/service/{$driver}") }}" aria-label="{{ trans('settings.users_social_connect') }} - {{ $driver }}"
-                                           class="button small outline">{{ trans('settings.users_social_connect') }}</a>
-                                    @endif
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            </section>
-        @endif
     </div>
 
-@stop
+@endsection

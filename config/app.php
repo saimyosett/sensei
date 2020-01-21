@@ -42,6 +42,13 @@ return [
 
     'debug' => env('APP_DEBUG', false),
 
+    // Set the default view type for various lists. Can be overridden by user preferences.
+    // These will be used for public viewers and users that have not set a preference.
+    'views' => [
+        'books' => env('APP_VIEWS_BOOKS', 'list'),
+        'bookshelves' => env('APP_VIEWS_BOOKSHELVES', 'grid'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application URL
@@ -81,7 +88,13 @@ return [
     |
     */
 
-    'locale' => 'en',
+    // Default locale to use
+    'locale' => env('APP_LANG', 'en'),
+
+    'locales' => [
+        'en', 'ar', 'de', 'de_informal', 'es', 'es_AR', 'fr', 'hu', 'nl', 'pt_BR',
+        'sk', 'cs', 'sv', 'ko', 'ja', 'pl', 'it', 'ru', 'uk', 'zh_CN', 'zh_TW', 'tr'
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -166,6 +179,12 @@ return [
         /*
          * Package Service Providers...
          */
+
+
+        // App replacement service providers (Extends Laravel)
+        // App\Providers\PaginationServiceProvider::class,
+        App\Providers\TranslationServiceProvider::class,
+
 
         /*
          * Application Service Providers...

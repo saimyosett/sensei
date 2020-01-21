@@ -18,7 +18,7 @@ class CreateBooksTable extends Migration
             $table->string('name');
             $table->integer('image_id')->nullable()->default(null);
             $table->string('slug')->indexed();
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->boolean('restricted')->default(false);
             $table->integer('created_by');
             $table->integer('updated_by');

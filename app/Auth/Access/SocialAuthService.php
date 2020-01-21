@@ -8,8 +8,9 @@ use App\Exceptions\SocialDriverNotConfigured;
 use App\Exceptions\SocialSignInAccountNotUsed;
 use App\Exceptions\UserRegistrationException;
 use Illuminate\Support\Str;
-use Laravel\Socialite\Contracts\Factory as Socialite;
-use Laravel\Socialite\Contracts\User as SocialUser;
+
+// use Laravel\Socialite\Contracts\Factory as Socialite;
+// use Laravel\Socialite\Contracts\User as SocialUser;
 
 class SocialAuthService
 {
@@ -25,11 +26,11 @@ class SocialAuthService
      * @param Socialite     $socialite
      * @param SocialAccount $socialAccount
      */
-    public function __construct(UserRepo $userRepo, Socialite $socialite, SocialAccount $socialAccount)
+    public function __construct(UserRepo $userRepo, Socialite $socialite)
     {
         $this->userRepo = $userRepo;
-        $this->socialite = $socialite;
-        $this->socialAccount = $socialAccount;
+        // $this->socialite = $socialite;
+        // $this->socialAccount = $socialAccount;
     }
 
 
