@@ -86,11 +86,11 @@ class PageController extends Controller
         $templates = $this->pageRepo->getTemplates(10);
 
         return view('pages.edit', [
-            'page' => $draft,
-            'book' => $draft->book,
-            'isDraft' => true,
+            'page'          => $draft,
+            'book'          => $draft->book,
+            'isDraft'       => true,
             'draftsEnabled' => $draftsEnabled,
-            'templates' => $templates,
+            'templates'     => $templates,
         ]);
     }
 
@@ -148,12 +148,12 @@ class PageController extends Controller
         Views::add($page);
         $this->setPageTitle($page->getShortName());
         return view('pages.show', [
-            'page' => $page,
-            'book' => $page->book,
-            'current' => $page,
-            'sidebarTree' => $sidebarTree,
+            'page'            => $page,
+            'book'            => $page->book,
+            'current'         => $page,
+            'sidebarTree'     => $sidebarTree,
             'commentsEnabled' => $commentsEnabled,
-            'pageNav' => $pageNav
+            'pageNav'         => $pageNav
         ]);
     }
 
@@ -201,11 +201,11 @@ class PageController extends Controller
         $draftsEnabled = $this->isSignedIn();
         $this->setPageTitle(trans('entities.pages_editing_named', ['pageName' => $page->getShortName()]));
         return view('pages.edit', [
-            'page' => $page,
-            'book' => $page->book,
-            'current' => $page,
+            'page'          => $page,
+            'book'          => $page->book,
+            'current'       => $page,
             'draftsEnabled' => $draftsEnabled,
-            'templates' => $templates,
+            'templates'     => $templates,
         ]);
     }
 
@@ -269,10 +269,10 @@ class PageController extends Controller
     {
         $page = $this->pageRepo->getBySlug($bookSlug, $pageSlug);
         $this->checkOwnablePermission('page-delete', $page);
-        $this->setPageTitle(trans('entities.pages_delete_named', ['pageName'=>$page->getShortName()]));
+        $this->setPageTitle(trans('entities.pages_delete_named', ['pageName' => $page->getShortName()]));
         return view('pages.delete', [
-            'book' => $page->book,
-            'page' => $page,
+            'book'    => $page->book,
+            'page'    => $page,
             'current' => $page
         ]);
     }
@@ -285,10 +285,10 @@ class PageController extends Controller
     {
         $page = $this->pageRepo->getById($pageId);
         $this->checkOwnablePermission('page-update', $page);
-        $this->setPageTitle(trans('entities.pages_delete_draft_named', ['pageName'=>$page->getShortName()]));
+        $this->setPageTitle(trans('entities.pages_delete_draft_named', ['pageName' => $page->getShortName()]));
         return view('pages.delete', [
-            'book' => $page->book,
-            'page' => $page,
+            'book'    => $page->book,
+            'page'    => $page,
             'current' => $page
         ]);
     }
@@ -453,7 +453,7 @@ class PageController extends Controller
         $page = $this->pageRepo->getBySlug($bookSlug, $pageSlug);
         $this->checkOwnablePermission('restrictions-manage', $page);
         return view('pages.permissions', [
-            'page'  => $page,
+            'page' => $page,
         ]);
     }
 

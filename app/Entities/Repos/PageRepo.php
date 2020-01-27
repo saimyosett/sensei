@@ -127,10 +127,10 @@ class PageRepo
     public function getNewDraftPage(Entity $parent)
     {
         $page = (new Page())->forceFill([
-            'name' => trans('entities.pages_initial_name'),
+            'name'       => trans('entities.pages_initial_name'),
             'created_by' => user()->id,
             'updated_by' => user()->id,
-            'draft' => true,
+            'draft'      => true,
         ]);
 
         if ($parent instanceof Chapter) {
@@ -140,7 +140,6 @@ class PageRepo
             $page->book_id = $parent->id;
         }
 
-        $page->save();
         $page->refresh()->rebuildPermissions();
         return $page;
     }

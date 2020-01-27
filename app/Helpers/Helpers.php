@@ -70,7 +70,7 @@ function hasAppAccess(): bool
 function userCan(string $permission, Ownable $ownable = null): bool
 {
     if ($ownable === null) {
-        return user() && user()->can($permission);
+        return auth()->user() && auth()->user()->can($permission);
     }
 
     // Check permission on ownable item
@@ -140,7 +140,7 @@ function icon(string $name, array $attrs = []): string
     ], $attrs);
     $attrString = ' ';
     foreach ($attrs as $attrName => $attr) {
-        $attrString .=  $attrName . '="' . $attr . '" ';
+        $attrString .= $attrName . '="' . $attr . '" ';
     }
 
     $iconPath = resource_path('icons/' . $name . '.svg');

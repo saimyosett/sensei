@@ -95,7 +95,7 @@ class TrashCan
      */
     protected function destroyCommonRelations(Entity $entity)
     {
-        Activity::removeEntity($entity);
+        // Activity::removeEntity($entity);
         $entity->views()->delete();
         $entity->permissions()->delete();
         $entity->tags()->delete();

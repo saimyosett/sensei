@@ -23,7 +23,7 @@ class CreateChaptersTable extends Migration
             $table->boolean('restricted')->default(false);
             $table->integer('created_by');
             $table->integer('updated_by');
-            $table->nullableTimestamps();
+            $table->timestamps();
 
             $table->index('slug');
             $table->index('book_id');

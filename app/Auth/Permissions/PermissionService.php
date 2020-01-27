@@ -191,7 +191,7 @@ class PermissionService
         return $this->entityProvider->book->newQuery()
             ->select(['id', 'restricted', 'created_by'])->with(['chapters' => function ($query) {
                 $query->select(['id', 'restricted', 'created_by', 'book_id']);
-            }, 'pages'  => function ($query) {
+            }, 'pages' => function ($query) {
                 $query->select(['id', 'restricted', 'created_by', 'book_id', 'chapter_id']);
             }]);
     }

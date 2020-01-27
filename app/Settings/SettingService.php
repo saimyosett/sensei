@@ -87,7 +87,7 @@ class SettingService
      */
     public function getForCurrentUser($key, $default = false)
     {
-        return $this->getUser(user(), $key, $default);
+        return $this->getUser(auth()->user(), $key, $default);
     }
 
     /**

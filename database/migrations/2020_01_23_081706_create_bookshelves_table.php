@@ -1,9 +1,8 @@
 <?php
 
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateBookshelvesTable extends Migration
 {
@@ -43,36 +42,6 @@ class CreateBookshelvesTable extends Migration
             $table->foreign('book_id')->references('id')->on('books')
                 ->onUpdate('cascade')->onDelete('cascade');
         });
-
-        DB::table('role_permissions')->where('name', 'like', 'bookshelf-%')->delete();
-
-        $ops = ['View All', 'View Own', 'Create All', 'Create Own', 'Update All', 'Update Own', 'Delete All', 'Delete Own'];
-        foreach ($ops as $op) {
-            $dbOpName = strtolower(str_replace(' ', '-', $op));
-            $roleIdsWithBookPermission = DB::table('role_permissions')
-                ->leftJoin('permission_role', 'role_permissions.id', '=', 'permission_role.permission_id')
-                ->leftJoin('roles', 'roles.id', '=', 'permission_role.role_id')
-                ->where('role_permissions.name', '=', 'book-' . $dbOpName)->get(['roles.id'])->pluck('id');
-
-            $permId = DB::table('role_permissions')->insertGetId([
-                'name' => 'bookshelf-' . $dbOpName,
-                'display_name' => $op . ' ' . 'BookShelves',
-                'created_at' => Carbon::now()->toDateTimeString(),
-                'updated_at' => Carbon::now()->toDateTimeString()
-            ]);
-
-            $rowsToInsert = $roleIdsWithBookPermission->filter(function ($roleId) {
-                return !is_null($roleId);
-            })->map(function ($roleId) use ($permId) {
-                return [
-                    'role_id' => $roleId,
-                    'permission_id' => $permId
-                ];
-            })->toArray();
-
-            // Assign view permission to all current roles
-            DB::table('permission_role')->insert($rowsToInsert);
-        }
     }
 
     /**
@@ -82,7 +51,7 @@ class CreateBookshelvesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bookshelves_books');
         Schema::dropIfExists('bookshelves');
+        Schema::dropIfExists('bookshelves_books');
     }
 }

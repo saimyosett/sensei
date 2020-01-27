@@ -15,12 +15,12 @@ class CreateEntityPermissionsTable extends Migration
     {
         Schema::create('entity_permissions', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('restrictable_id');
-            $table->string('restrictable_type');
+            $table->morphs('restrictable');
             $table->integer('role_id');
             $table->string('action');
             $table->index('role_id');
             $table->index('action');
+
             $table->index(['restrictable_id', 'restrictable_type']);
         });
     }

@@ -2,20 +2,20 @@
 
 namespace App\Providers;
 
+use Blade;
 use App\Entities\Book;
-use App\Entities\Page;
-use App\Entities\Chapter;
-use App\Settings\Setting;
 use App\Entities\Bookshelf;
-use App\Settings\SettingService;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\ServiceProvider;
 use App\Entities\BreadcrumbsViewComposer;
-use Illuminate\Support\Facades\Validator;
+use App\Entities\Chapter;
+use App\Entities\Page;
+use App\Settings\Setting;
+use App\Settings\SettingService;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
+use Schema;
+use URL;
+use Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -75,7 +75,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Set morph-map due to namespace changes
         Relation::morphMap([
-            'App\\App' => Bookshelf::class,
+            'App\\Bookshelf' => Bookshelf::class,
             'App\\Book' => Book::class,
             'App\\Chapter' => Chapter::class,
             'App\\Page' => Page::class,

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSettingsTable extends Migration
+class CreateViewsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateSettingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('settings', function (Blueprint $table) {
-            $table->string('setting_key')->primary()->indexed();
-            $table->text('value');
-            $table->nullableTimestamps();
+        Schema::create('views', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id');
+            $table->morphs('viewable');
+            $table->integer('views');
+            $table->timestamps();
         });
     }
 
@@ -27,6 +29,6 @@ class CreateSettingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('settings');
+        Schema::dropIfExists('views');
     }
 }

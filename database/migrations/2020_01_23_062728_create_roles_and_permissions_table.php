@@ -16,7 +16,7 @@ use Illuminate\Database\Migrations\Migration;
  * @url https://github.com/Zizaco/entrust
  */
 
-class CreateRolesAndPermissions extends Migration
+class CreateRolesAndPermissionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -100,9 +100,19 @@ class CreateRolesAndPermissions extends Migration
             'updated_at' => Carbon::now()->toDateTimeString()
         ]);
 
+        $publicId = DB::table('roles')->insertGetId([
+            'name' => 'public',
+            'display_name' => 'Public',
+            'system_name' => 'public',
+            'description' => 'The role given to public visitors if allowed',
+            'created_at' => Carbon::now()->toDateTimeString(),
+            'updated_at' => Carbon::now()->toDateTimeString()
+        ]);
+
         // Get roles with permissions we need to change
         $adminRoleId = DB::table('roles')->where('name', '=', 'admin')->first()->id;
         $editorRole = DB::table('roles')->where('name', '=', 'editor')->first();
+        $publicRoleId = DB::table('roles')->where('name', '=', 'public')->first()->id;
 
         // Create & attach new entity permissions
         $entities = ['Book', 'Page', 'Chapter', 'Image'];
@@ -112,8 +122,8 @@ class CreateRolesAndPermissions extends Migration
                 $permissionId = DB::table('role_permissions')->insertGetId([
                     'name' => strtolower($entity) . '-' . strtolower(str_replace(' ', '-', $op)),
                     'display_name' => $op . ' ' . $entity . 's',
-                    'created_at' => \Carbon\Carbon::now()->toDateTimeString(),
-                    'updated_at' => \Carbon\Carbon::now()->toDateTimeString()
+                    'created_at' => Carbon::now()->toDateTimeString(),
+                    'updated_at' => Carbon::now()->toDateTimeString()
                 ]);
                 DB::table('permission_role')->insert([
                     'role_id' => $adminRoleId,
@@ -128,6 +138,112 @@ class CreateRolesAndPermissions extends Migration
             }
         }
 
+
+        $currentRoles = DB::table('roles')->get();
+
+        // Create new view permission
+        $entities = ['Book', 'Page', 'Chapter'];
+        $ops = ['View All', 'View Own'];
+        foreach ($entities as $entity) {
+            foreach ($ops as $op) {
+                $permId = DB::table('role_permissions')->insertGetId([
+                        'name' => strtolower($entity) . '-' . strtolower(str_replace(' ', '-', $op)),
+                        'display_name' => $op . ' ' . $entity . 's',
+                        'created_at' => Carbon::now()->toDateTimeString(),
+                        'updated_at' => Carbon::now()->toDateTimeString()
+                    ]);
+                // Assign view permission to all current roles
+                foreach ($currentRoles as $role) {
+                    DB::table('permission_role')->insert([
+                        'role_id' => $role->id,
+                        'permission_id' => $permId
+                    ]);
+                }
+            }
+        }
+
+        // Copy existing role permissions from Books
+        $ops = ['View All', 'View Own', 'Create All', 'Create Own', 'Update All', 'Update Own', 'Delete All', 'Delete Own'];
+        foreach ($ops as $op) {
+            $dbOpName = strtolower(str_replace(' ', '-', $op));
+            $roleIdsWithBookPermission = DB::table('role_permissions')
+                ->leftJoin('permission_role', 'role_permissions.id', '=', 'permission_role.permission_id')
+                ->leftJoin('roles', 'roles.id', '=', 'permission_role.role_id')
+                ->where('role_permissions.name', '=', 'book-' . $dbOpName)->get(['roles.id'])->pluck('id');
+
+            $permId = DB::table('role_permissions')->insertGetId([
+                'name' => 'bookshelf-' . $dbOpName,
+                'display_name' => $op . ' ' . 'BookShelves',
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString()
+            ]);
+
+            $rowsToInsert = $roleIdsWithBookPermission->filter(function ($roleId) {
+                return !is_null($roleId);
+            })->map(function ($roleId) use ($permId) {
+                return [
+                    'role_id' => $roleId,
+                    'permission_id' => $permId
+                ];
+            })->toArray();
+
+            // Assign view permission to all current roles
+            DB::table('permission_role')->insert($rowsToInsert);
+        }
+
+        // Assign new comment permissions to admin role
+        $adminRoleId = DB::table('roles')->where('system_name', '=', 'admin')->first()->id;
+        // Create & attach new entity permissions
+        $ops = ['Create All', 'Create Own', 'Update All', 'Update Own', 'Delete All', 'Delete Own'];
+        $entity = 'Comment';
+        foreach ($ops as $op) {
+            $permissionId = DB::table('role_permissions')->insertGetId([
+                'name' => strtolower($entity) . '-' . strtolower(str_replace(' ', '-', $op)),
+                'display_name' => $op . ' ' . $entity . 's',
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString()
+            ]);
+            DB::table('permission_role')->insert([
+                'role_id' => $adminRoleId,
+                'permission_id' => $permissionId
+            ]);
+        }
+
+
+        // Get roles with permissions we need to change
+        $adminRoleId = DB::table('roles')->where('system_name', '=', 'admin')->first()->id;
+
+        // Create & attach new entity permissions
+        $ops = ['Create All', 'Create Own', 'Update All', 'Update Own', 'Delete All', 'Delete Own'];
+        $entity = 'Attachment';
+        foreach ($ops as $op) {
+            $permissionId = DB::table('role_permissions')->insertGetId([
+                'name' => strtolower($entity) . '-' . strtolower(str_replace(' ', '-', $op)),
+                'display_name' => $op . ' ' . $entity . 's',
+                'created_at' => \Carbon\Carbon::now()->toDateTimeString(),
+                'updated_at' => \Carbon\Carbon::now()->toDateTimeString()
+            ]);
+            DB::table('permission_role')->insert([
+                'role_id' => $adminRoleId,
+                'permission_id' => $permissionId
+            ]);
+        }
+
+        // Add new view permissions to public role
+        // $entities = ['Book', 'Page', 'Chapter'];
+        // $ops = ['View All', 'View Own'];
+        // foreach ($entities as $entity) {
+        //     foreach ($ops as $op) {
+        //         $name = strtolower($entity) . '-' . strtolower(str_replace(' ', '-', $op));
+        //         $permission = DB::table('role_permissions')->where('name', '=', $name)->first();
+        //         // Assign view permission to public
+        //         DB::table('permission_role')->insert([
+        //             'role_id' => $publicRoleId,
+        //             'permission_id' => $permission->id
+        //         ]);
+        //     }
+        // }
+
         // Create & attach new admin permissions
         $permissionsToCreate = [
             'settings-manage' => 'Manage Settings',
@@ -141,8 +257,8 @@ class CreateRolesAndPermissions extends Migration
             $permissionId = DB::table('role_permissions')->insertGetId([
                 'name' => $name,
                 'display_name' => $displayName,
-                'created_at' => \Carbon\Carbon::now()->toDateTimeString(),
-                'updated_at' => \Carbon\Carbon::now()->toDateTimeString()
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString()
             ]);
             DB::table('permission_role')->insert([
                 'role_id' => $adminRoleId,

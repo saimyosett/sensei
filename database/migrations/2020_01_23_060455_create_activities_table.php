@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateViewsTable extends Migration
+class CreateActivitiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateViewsTable extends Migration
      */
     public function up()
     {
-        Schema::create('views', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('activities', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('key');
+            $table->text('extra')->nullable();
+            $table->integer('book_id')->indexed();
             $table->integer('user_id');
-            $table->integer('viewable_id');
-            $table->string('viewable_type');
-            $table->integer('views');
-            $table->nullableTimestamps();
+            $table->morphs('entity');
+            $table->timestamps();
         });
     }
 
@@ -30,6 +31,6 @@ class CreateViewsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('views');
+        Schema::dropIfExists('activities');
     }
 }

@@ -7,11 +7,6 @@
             <div class="py-m">
                 @include('settings.navbar', ['selected' => 'settings'])
             </div>
-            <div class="text-right p-m">
-                {{-- <a target="_blank" rel="noopener noreferrer" href="https://github.com/BookStackApp/BookStack/releases">
-                    Sensei @if(strpos($version, 'v') !== 0) version @endif {{ $version }}
-                </a> --}}
-            </div>
         </div>
 
         <div class="card content-wrap auto-height">
@@ -26,11 +21,6 @@
                         <div>
                             <label for="setting-app-public" class="setting-list-label">{{ trans('settings.app_public_access') }}</label>
                             <p class="small">{!! trans('settings.app_public_access_desc') !!}</p>
-                            @if(userCan('users-manage'))
-                                <p class="small mb-none">
-                                    <a href="{{ url($guestUser->getEditUrl()) }}">{!! trans('settings.app_public_access_desc_guest') !!}</a>
-                                </p>
-                            @endif
                         </div>
                         <div>
                             @include('components.toggle-switch', [

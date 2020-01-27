@@ -17,11 +17,11 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->integer('avatar_id')->default(0);
-            $table->string('system_name')->nullable()->index();
+            $table->integer('avatar_image_id')->default(0);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password', 60);
+            $table->string('password');
+            $table->string('system_name')->nullable()->index();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -31,18 +31,9 @@ class CreateUsersTable extends Migration
             'name' => 'Admin',
             'email' => 'admin@cmps.jp',
             'password' => bcrypt('cmps@1192'),
+            'system_name' => 'admin',
             'created_at' => Carbon::now()->toDateTimeString(),
             'updated_at' => Carbon::now()->toDateTimeString()
-        ]);
-
-        // Insert our new public system user.
-        $publicUserId = DB::table('users')->insertGetId([
-            'email' => 'guest@example.com',
-            'name' => 'Guest',
-            'password' => bcrypt('cmps@1192'),
-            'system_name' => 'public',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
         ]);
     }
 

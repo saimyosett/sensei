@@ -21,6 +21,8 @@ class BookController extends Controller
 
     /**
      * BookController constructor.
+     * @param EntityContext $entityContextManager
+     * @param BookRepo $bookRepo
      */
     public function __construct(EntityContext $entityContextManager, BookRepo $bookRepo)
     {
@@ -47,13 +49,13 @@ class BookController extends Controller
 
         $this->setPageTitle(trans('entities.books'));
         return view('books.index', [
-            'books' => $books,
+            'books'   => $books,
             'recents' => $recents,
             'popular' => $popular,
-            'new' => $new,
-            'view' => $view,
-            'sort' => $sort,
-            'order' => $order,
+            'new'     => $new,
+            'view'    => $view,
+            'sort'    => $sort,
+            'order'   => $order,
         ]);
     }
 
@@ -85,9 +87,9 @@ class BookController extends Controller
     {
         $this->checkPermission('book-create-all');
         $this->validate($request, [
-            'name' => 'required|string|max:255',
+            'name'        => 'required|string|max:255',
             'description' => 'string|max:1000',
-            'image' => $this->getImageValidationRules(),
+            'image'       => $this->getImageValidationRules(),
         ]);
 
         $bookshelf = null;
@@ -123,10 +125,10 @@ class BookController extends Controller
 
         $this->setPageTitle($book->getShortName());
         return view('books.show', [
-            'book' => $book,
-            'current' => $book,
+            'book'         => $book,
+            'current'      => $book,
             'bookChildren' => $bookChildren,
-            'activity' => Activity::entityActivity($book, 20, 1)
+            'activity'     => Activity::entityActivity($book, 20, 1)
         ]);
     }
 
@@ -137,7 +139,7 @@ class BookController extends Controller
     {
         $book = $this->bookRepo->getBySlug($slug);
         $this->checkOwnablePermission('book-update', $book);
-        $this->setPageTitle(trans('entities.books_edit_named', ['bookName'=>$book->getShortName()]));
+        $this->setPageTitle(trans('entities.books_edit_named', ['bookName' => $book->getShortName()]));
         return view('books.edit', ['book' => $book, 'current' => $book]);
     }
 
@@ -152,16 +154,16 @@ class BookController extends Controller
         $book = $this->bookRepo->getBySlug($slug);
         $this->checkOwnablePermission('book-update', $book);
         $this->validate($request, [
-            'name' => 'required|string|max:255',
+            'name'        => 'required|string|max:255',
             'description' => 'string|max:1000',
-            'image' => $this->getImageValidationRules(),
+            'image'       => $this->getImageValidationRules(),
         ]);
 
         $book = $this->bookRepo->update($book, $request->all());
         $resetCover = $request->has('image_reset');
         $this->bookRepo->updateCoverImage($book, $request->file('image', null), $resetCover);
 
-        Activity::add($book, 'book_update', $book->id);
+        // Activity::add($book, 'book_update', $book->id);
 
         return redirect($book->getUrl());
     }
@@ -187,7 +189,7 @@ class BookController extends Controller
         $book = $this->bookRepo->getBySlug($bookSlug);
         $this->checkOwnablePermission('book-delete', $book);
 
-        Activity::addMessage('book_delete', $book->name);
+        // Activity::addMessage('book_delete', $book->name);
         $this->bookRepo->destroy($book);
 
         return redirect('/books');

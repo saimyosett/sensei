@@ -3,9 +3,9 @@
 namespace App\Providers;
 
 use App\Translation\FileLoader;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Translation\TranslationServiceProvider as BaseProvider;
 
-class TranslationServiceProvider extends ServiceProvider
+class TranslationServiceProvider extends BaseProvider
 {
     /**
     * Register the translation line loader.

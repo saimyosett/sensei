@@ -44,6 +44,7 @@ class ActivityService
      */
     public function addMessage(string $activityKey, string $message, int $bookId = null)
     {
+        dd($this);
         $this->newActivityForUser($activityKey, $bookId)->forceFill([
             'extra' => $message
         ])->save();
