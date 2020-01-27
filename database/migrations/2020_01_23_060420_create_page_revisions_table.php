@@ -19,8 +19,19 @@ class CreatePageRevisionsTable extends Migration
             $table->string('name');
             $table->longText('html');
             $table->longText('text');
+            $table->string('slug');
+            $table->string('book_slug');
+            $table->string('summary')->nullable();
+            $table->string('type')->default('version');
+            $table->longText('markdown')->default('');
+            $table->integer('revision_number');
             $table->integer('created_by');
             $table->timestamps();
+
+            $table->index('slug');
+            $table->index('book_slug');
+            $table->index('type');
+            $table->index('revision_number');
         });
     }
 

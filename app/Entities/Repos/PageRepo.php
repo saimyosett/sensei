@@ -138,8 +138,10 @@ class PageRepo
             $page->book_id = $parent->book_id;
         } else {
             $page->book_id = $parent->id;
+            $page->chapter_id = 0;
         }
 
+        $page->save();
         $page->refresh()->rebuildPermissions();
         return $page;
     }
